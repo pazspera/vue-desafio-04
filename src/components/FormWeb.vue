@@ -78,20 +78,15 @@ export default {
     };
   },
   methods: {
-      submitForm() {
-          this.$emit("submit-form", {
-              name: this.form.name,
-              age: this.form.age,
-              email: this.form.email,
-              selectedCourses: this.form.selectedCourses,
-          });
-
-          console.log(this.form.name);
-          console.log(this.form.age);
-          console.log(this.form.email);
-          console.log(this.form.selectedCourses);
-      }
-  }
+    submitForm() {
+      this.$emit("submit-form", {
+        name: this.form.name,
+        age: this.form.age,
+        email: this.form.email,
+        selectedCourses: this.form.selectedCourses,
+      });
+    },
+  },
 };
 </script>
 

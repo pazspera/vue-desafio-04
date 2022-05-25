@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <FormWeb @submit-form="addUser"/>
+    <FormWeb @submit-form="addUser" />
     <div class="my-5"></div>
-    <TableUsers :users="users"/>
+    <TableUsers :users="users" />
   </div>
 </template>
 
@@ -14,23 +14,25 @@ export default {
   name: "App",
   components: {
     FormWeb,
-    TableUsers
+    TableUsers,
   },
   data() {
     return {
-      users: []
-    }
+      users: [],
+    };
   },
-  addUser(formData){
-    const newUser = { ...formData};
-    console.log(newUser);
-    this.users.push(newUser);
-  }
+  methods: {
+    addUser(formData) {
+      const newUser = { ...formData };
+      console.log(newUser);
+      this.users.push(newUser);
+    },
+  },
 };
 </script>
 
 <style>
-#app{
+#app {
   margin: 3rem 0;
 }
 </style>
