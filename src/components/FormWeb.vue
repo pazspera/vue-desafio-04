@@ -7,6 +7,7 @@
           <label for="name" class="form-label">Nombre</label>
           <input type="text" class="form-control" name="Name" v-model="form.name" />
           <p>Nombre: {{ form.name }}</p>
+          <p v-if="$v.form.name.$invalid" class="text-danger">El nombre es un campo requerido</p>
         </div>
       </div>
       <!-- Edad -->
@@ -15,6 +16,7 @@
           <label for="age" class="form-label">Edad</label>
           <input type="number" name="age" class="form-control" v-model="form.age" />
           <p>Edad: {{ form.age }}</p>
+          <p v-if="$v.form.age.$invalid" class="text-danger">La edad ingresada es inválida</p>
         </div>
       </div>
       <!-- Email -->
@@ -37,14 +39,20 @@
         </div>
       </div>
       <!-- Submit -->
-      <button type="submit" class="btn btn-primary">Enviar</button>
+      <button :disabled="$v.form.$invalid" type="submit" class="btn btn-primary">Enviar</button>
     </form>
   </div>
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required, integer, between } from "vuelidate/lib/validators";
+
 export default {
   name: "FormWeb",
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
       availableCourses: [
@@ -77,14 +85,30 @@ export default {
       },
     };
   },
+  validations: {
+    form: {
+      name: {
+        required: required,
+      },
+      age: {
+        required: required,
+        integer: integer,
+        between: between(18, 120),
+      },
+    },
+  },
   methods: {
     submitForm() {
-      this.$emit("submit-form", {
-        name: this.form.name,
-        age: this.form.age,
-        email: this.form.email,
-        selectedCourses: this.form.selectedCourses,
-      });
+      if (!this.$v.form.$invalid) {
+        this.$emit("submit-form", {
+          name: this.form.name,
+          age: this.form.age,
+          email: this.form.email,
+          selectedCourses: this.form.selectedCourses,
+        });
+      } else {
+        console.log("Invalid form");
+      }
     },
   },
 };
