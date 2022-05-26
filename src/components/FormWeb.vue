@@ -25,6 +25,7 @@
           <label for="email" class="form-label">Email</label>
           <input type="email" name="email" class="form-control" v-model="form.email" />
           <p>Email: {{ form.email }}</p>
+          <p v-if="$v.form.email.$invalid" class="text-danger">El email es requerido</p>
         </div>
       </div>
       <!-- Cursos -->
@@ -36,6 +37,7 @@
             <label :for="course.id" class="form-check-label">{{ course.name }}</label>
           </div>
           <p>Cursos seleccionados: {{ form.selectedCourses }}</p>
+          <p v-if="$v.form.selectedCourses.$invalid" class="text-danger">Seleccione al menos un curso</p>
         </div>
       </div>
       <!-- Submit -->
@@ -45,7 +47,7 @@
 </template>
 
 <script>
-import { required, integer, between } from "vuelidate/lib/validators";
+import { required, integer, between, email } from "vuelidate/lib/validators";
 
 export default {
   name: "FormWeb",
@@ -91,6 +93,13 @@ export default {
         integer,
         between: between(18, 120),
       },
+      email: {
+        required,
+        email
+      },
+      selectedCourses: {
+        required
+      }
     },
   },
   methods: {
