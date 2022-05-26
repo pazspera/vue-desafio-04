@@ -103,6 +103,9 @@ export default {
     },
   },
   methods: {
+    capitalize(value) {
+      return value.replace(/\b\w/g, (l) => l.toUpperCase());
+    },
     resetForm() {
       this.form.name = "";
       this.form.age = 0;
@@ -112,9 +115,9 @@ export default {
     submitForm() {
       if (!this.$v.form.$invalid) {
         this.$emit("submit-form", {
-          name: this.form.name,
+          name: this.capitalize(this.form.name),
           age: this.form.age,
-          email: this.form.email,
+          email: this.form.email.toLowerCase(),
           selectedCourses: this.form.selectedCourses,
         });
         this.$v.$reset();
