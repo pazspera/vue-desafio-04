@@ -7,6 +7,7 @@
           <label for="name" class="form-label">Nombre</label>
           <input type="text" class="form-control" name="Name" v-model.trim="form.name" />
           <p v-if="$v.form.name.$invalid" class="text-danger">El nombre es requerido</p>
+          <p class="text-success" v-else>El valor ingresado es correcto</p>
         </div>
       </div>
       <!-- Edad -->
@@ -15,6 +16,7 @@
           <label for="age" class="form-label">Edad</label>
           <input type="number" name="age" class="form-control" v-model.trim="form.age" />
           <p v-if="$v.form.age.$invalid" class="text-danger">La edad es requerida</p>
+          <p class="text-success" v-else>El valor ingresado es correcto</p>
         </div>
       </div>
       <!-- Email -->
@@ -23,6 +25,7 @@
           <label for="email" class="form-label">Email</label>
           <input type="email" name="email" class="form-control" v-model="form.email" />
           <p v-if="$v.form.email.$invalid" class="text-danger">El email es requerido</p>
+          <p class="text-success" v-else>El valor ingresado es correcto</p>
         </div>
       </div>
       <!-- Cursos -->
@@ -34,6 +37,7 @@
             <label :for="course.id" class="form-check-label">{{ course.name }}</label>
           </div>
           <p v-if="$v.form.selectedCourses.$invalid" class="text-danger">Seleccione al menos un curso</p>
+          <p class="text-success" v-else>El valor ingresado es correcto</p>
         </div>
       </div>
       <!-- Submit -->
