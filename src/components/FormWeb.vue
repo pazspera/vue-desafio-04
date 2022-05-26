@@ -7,6 +7,7 @@
           <label for="name" class="form-label">Nombre</label>
           <input type="text" class="form-control" name="Name" v-model="form.name" />
           <p>Nombre: {{ form.name }}</p>
+          <p v-if="$v.form.name.$invalid" class="text-danger">El nombre es requerido</p>
         </div>
       </div>
       <!-- Edad -->
@@ -15,6 +16,7 @@
           <label for="age" class="form-label">Edad</label>
           <input type="number" name="age" class="form-control" v-model="form.age" />
           <p>Edad: {{ form.age }}</p>
+          <p v-if="$v.form.age.$invalid" class="text-danger">La edad ingresada es inválida</p>
         </div>
       </div>
       <!-- Email -->
@@ -30,19 +32,21 @@
         <div class="col">
           <p class="form-label">Cursos disponibles</p>
           <div class="form-check" v-for="course in availableCourses" :key="course.id" :value="course.name">
-            <input class="form-check-input" type="checkbox" :value="course.name" :id="course.id" v-model="form.selectedCourses" />
+            <input class="form-check-input" type="checkbox" :value="course.name" :id="course.id" v-model.number="form.selectedCourses" />
             <label :for="course.id" class="form-check-label">{{ course.name }}</label>
           </div>
           <p>Cursos seleccionados: {{ form.selectedCourses }}</p>
         </div>
       </div>
       <!-- Submit -->
-      <button type="submit" class="btn btn-primary">Enviar</button>
+      <button :disabled="$v.form.$invalid" type="submit" class="btn btn-primary">Enviar</button>
     </form>
   </div>
 </template>
 
 <script>
+import { required, integer, between } from "vuelidate/lib/validators";
+
 export default {
   name: "FormWeb",
   data() {
@@ -77,14 +81,30 @@ export default {
       },
     };
   },
+  validations: {
+    form: {
+      name: {
+        required,
+      },
+      age: {
+        required,
+        integer,
+        between: between(18, 120),
+      },
+    },
+  },
   methods: {
     submitForm() {
-      this.$emit("submit-form", {
-        name: this.form.name,
-        age: this.form.age,
-        email: this.form.email,
-        selectedCourses: this.form.selectedCourses,
-      });
+      if (!this.$v.form.$invalid) {
+        this.$emit("submit-form", {
+          name: this.form.name,
+          age: this.form.age,
+          email: this.form.email,
+          selectedCourses: this.form.selectedCourses,
+        });
+      } else {
+        console.log("invalid form");
+      }
     },
   },
 };
