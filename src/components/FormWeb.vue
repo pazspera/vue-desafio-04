@@ -1,12 +1,11 @@
 <template>
   <div class="container">
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" autocomplete="off">
       <!-- Nombre -->
       <div class="row mb-3">
         <div class="col">
           <label for="name" class="form-label">Nombre</label>
-          <input type="text" class="form-control" name="Name" v-model="form.name" />
-          <p>Nombre: {{ form.name }}</p>
+          <input type="text" class="form-control" name="Name" v-model.trim="form.name" />
           <p v-if="$v.form.name.$invalid" class="text-danger">El nombre es requerido</p>
         </div>
       </div>
@@ -14,9 +13,8 @@
       <div class="row mb-3">
         <div class="col">
           <label for="age" class="form-label">Edad</label>
-          <input type="number" name="age" class="form-control" v-model="form.age" />
-          <p>Edad: {{ form.age }}</p>
-          <p v-if="$v.form.age.$invalid" class="text-danger">La edad ingresada es inválida</p>
+          <input type="number" name="age" class="form-control" v-model.trim="form.age" />
+          <p v-if="$v.form.age.$invalid" class="text-danger">La edad es requerida</p>
         </div>
       </div>
       <!-- Email -->
@@ -24,7 +22,6 @@
         <div class="col">
           <label for="email" class="form-label">Email</label>
           <input type="email" name="email" class="form-control" v-model="form.email" />
-          <p>Email: {{ form.email }}</p>
           <p v-if="$v.form.email.$invalid" class="text-danger">El email es requerido</p>
         </div>
       </div>
@@ -36,7 +33,6 @@
             <input class="form-check-input" type="checkbox" :value="course.name" :id="course.id" v-model.number="form.selectedCourses" />
             <label :for="course.id" class="form-check-label">{{ course.name }}</label>
           </div>
-          <p>Cursos seleccionados: {{ form.selectedCourses }}</p>
           <p v-if="$v.form.selectedCourses.$invalid" class="text-danger">Seleccione al menos un curso</p>
         </div>
       </div>
@@ -95,14 +91,20 @@ export default {
       },
       email: {
         required,
-        email
+        email,
       },
       selectedCourses: {
-        required
-      }
+        required,
+      },
     },
   },
   methods: {
+    resetForm() {
+      this.form.name = "";
+      this.form.age = 0;
+      this.form.email = "";
+      this.form.selectedCourses = [];
+    },
     submitForm() {
       if (!this.$v.form.$invalid) {
         this.$emit("submit-form", {
@@ -111,6 +113,8 @@ export default {
           email: this.form.email,
           selectedCourses: this.form.selectedCourses,
         });
+        this.$v.$reset();
+        this.resetForm();
       } else {
         console.log("invalid form");
       }
